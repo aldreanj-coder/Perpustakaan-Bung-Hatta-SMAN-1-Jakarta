@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="id" class="h-full">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Perpustakaan</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .dark {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border: #334155;
+    }
+
+    .light {
+      --bg: #f0fdf4;
+      --surface: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.4s, color 0.4s;
+    }
+
+    .card-surface {
+      background: var(--surface);
+      border-color: var(--border);
+      transition: background 0.4s, border-color 0.4s;
+    }
+
+    .text-muted-custom {
+      color: var(--muted);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.3);
+      }
+
+      50% {
+        box-shadow: 0 0 20px 5px rgba(34, 197, 94, 0.15);
+      }
+    }
+
+    .anim-fade-up {
+      animation: fadeUp 0.7s ease-out both;
+    }
+
+    .anim-fade-up-d1 {
+      animation: fadeUp 0.7s ease-out 0.1s both;
+    }
+
+    .anim-fade-up-d2 {
+      animation: fadeUp 0.7s ease-out 0.2s both;
+    }
+
+    .anim-fade-up-d3 {
+      animation: fadeUp 0.7s ease-out 0.3s both;
+    }
+
+    .anim-scale-in {
+      animation: scaleIn 0.5s ease-out both;
+    }
+
+    .logo-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .star-btn {
+      cursor: pointer;
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    .star-btn:hover {
+      transform: scale(1.25);
+    }
+
+    .star-btn.active {
+      color: #facc15;
+      transform: scale(1.1);
+    }
+
+    .submit-btn {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      transform: translateX(-100%);
+      transition: none;
+    }
+
+    .submit-btn:hover::after {
+      transform: translateX(100%);
+      transition: transform 0.6s;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.97);
+    }
+
+    input,
+    textarea,
+    select {
+      background: var(--bg);
+      border-color: var(--border);
+      color: var(--text);
+      transition: background 0.4s, border-color 0.4s, color 0.4s, box-shadow 0.2s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+    }
+
+    .toast {
+      animation: fadeUp 0.4s ease-out both;
+    }
+
+    .success-check {
+      animation: scaleIn 0.4s ease-out 0.2s both;
+    }
+  </style>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+</head>
+
+<body class="h-full light">
+  <div id="app-wrapper" class="h-full w-full overflow-auto"><!-- Header -->
+    <header class="w-full py-4 px-6 flex items-center justify-between anim-fade-up">
+      <div class="flex items-center gap-3">
+        <div
+          class="logo-float w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg">
+          <i data-lucide="book-open" class="w-5 h-5 text-white"></i>
+        </div><span class="font-bold text-lg" id="header-brand">Ajukan Pendapatmu</span>
+      </div><button id="dark-toggle"
+        class="w-10 h-10 rounded-full card-surface border flex items-center justify-center hover:scale-110 transition-transform"
+        aria-label="Toggle dark mode"> <i data-lucide="moon" id="theme-icon-moon" class="w-5 h-5"></i> <i
+          data-lucide="sun" id="theme-icon-sun" class="w-5 h-5 hidden"></i> </button>
+    </header><!-- Hero -->
+    <main class="w-full max-w-xl mx-auto px-4 pb-12 pt-4">
+      <div class="text-center mb-8 anim-fade-up-d1">
+        <div
+          class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-xl"
+          style="animation: pulse-glow 3s infinite;"><i data-lucide="book-open" class="w-8 h-8 text-white"></i>
+        </div>
+        <h2 style="letter-spacing:2px;">PERPUSTAKAAN BUNG HATTA</h2>
+        <h1 id="el-title" class="text-3xl font-extrabold tracking-tight mb-2">SMA NEGERI 1 JAKARTA</h1>
+        <p id="el-subtitle" class="text-muted-custom text-base">Bantu kami meningkatkan layanan perpustakaan sekolah
+          dengan masukan Anda.</p>
+      </div><!-- Form Card -->
+      <div id="form-card" class="card-surface border rounded-2xl p-6 sm:p-8 shadow-xl anim-fade-up-d2">
+        <form id="feedback-form" action="https://formspree.io/f/xqewpkjn" method="POST"><!-- Nama -->
+          <div class="mb-5"><label class="block text-sm font-semibold mb-1.5">Nama <span
+                class="text-muted-custom font-normal">(opsional)</span></label> <input type="text" name="nama"
+              id="input-nama" placeholder="Masukkan nama Anda" class="w-full rounded-xl border px-4 py-3 text-sm">
+          </div><!-- Kelas -->
+          <div class="mb-5"><label for="input-kelas" class="block text-sm font-semibold mb-1.5">Kelas / Asal
+              Pengunjung</label> <select name="kelas" id="input-kelas"
+              class="w-full rounded-xl border px-4 py-3 text-sm">
+              <option value="">Pilih kelas...</option>
+              <option>Kelas 10</option>
+              <option>Kelas 11</option>
+              <option>Kelas 12</option>
+              <option>Guru / Staff</option>
+              <option>Pengunjung Umum</option>
+            </select>
+          </div><!-- Rating -->
+          <div class="mb-5"><label class="block text-sm font-semibold mb-2">Rating Pelayanan</label>
+            <div id="star-container" class="flex gap-1.5"><button type="button" class="star-btn text-gray-300"
+                data-star="1">
+                <svg width="32" height="32" viewbox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z" />
+                </svg></button> <button type="button" class="star-btn text-gray-300" data-star="2">
+                <svg width="32" height="32" viewbox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z" />
+                </svg></button> <button type="button" class="star-btn text-gray-300" data-star="3">
+                <svg width="32" height="32" viewbox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z" />
+                </svg></button> <button type="button" class="star-btn text-gray-300" data-star="4">
+                <svg width="32" height="32" viewbox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z" />
+                </svg></button> <button type="button" class="star-btn text-gray-300" data-star="5">
+                <svg width="32" height="32" viewbox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z" />
+                </svg></button>
+            </div><input type="hidden" name="rating" id="input-rating" value="0">
+            <p id="rating-error" class="text-red-500 text-xs mt-1 hidden">Silakan pilih rating.</p>
+          </div><!-- Kritik & Saran -->
+          <div class="mb-6"><label for="input-saran" class="block text-sm font-semibold mb-1.5">Kritik &amp; Saran <span
+                class="text-red-500">*</span></label> <textarea name="saran" id="input-saran" rows="4"
+              placeholder="Tulis kritik dan saran Anda di sini..."
+              class="w-full rounded-xl border px-4 py-3 text-sm resize-none"></textarea>
+            <p id="saran-error" class="text-red-500 text-xs mt-1 hidden">Kritik &amp; saran tidak boleh kosong.</p>
+          </div><!-- Submit --> <button type="submit" id="submit-btn"
+            class="submit-btn w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-sm tracking-wide hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300">
+            <span id="submit-text">Kirim Feedback</span> <span id="submit-loading" class="hidden">
+              <svg class="inline w-5 h-5 animate-spin mr-1" viewbox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25"></circle>
+                <path d="M4 12a8 8 0 018-8" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                  class="opacity-75" />
+              </svg> Mengirim... </span> </button>
+        </form>
+      </div><!-- Success Toast -->
+      <div id="success-toast" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+        <div class="card-surface border rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl toast">
+          <div
+            class="success-check w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-100 flex items-center justify-center"><i
+              data-lucide="check-circle-2" class="w-8 h-8 text-emerald-600"></i>
+          </div>
+          <h2 id="el-success-title" class="text-xl font-bold mb-2">Terima kasih atas feedback Anda!</h2>
+          <p class="text-muted-custom text-sm mb-5">Masukan Anda sangat berarti untuk kami.</p><button id="close-toast"
+            class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold text-sm hover:shadow-lg transition-all">Tutup</button>
+        </div>
+      </div>
+      <p class="text-center text-muted-custom text-xs mt-6 anim-fade-up-d3">©Sahabat Perpustakaan bung Hatta SMAN 1
+        Jakarta.</p>
+    </main>
+  </div>
+  <script>
+    const defaultConfig = {
+      page_title: 'Feedback Perpustakaan',
+      page_subtitle: 'Bantu kami meningkatkan layanan perpustakaan sekolah dengan masukan Anda.',
+      submit_button_text: 'Kirim Feedback',
+      success_message: 'Terima kasih atas feedback Anda!',
+      background_color: '#f0fdf4',
+      surface_color: '#ffffff',
+      text_color: '#1e293b',
+      accent_color: '#22c55e',
+      muted_color: '#64748b',
+      font_family: 'Plus Jakarta Sans',
+      font_size: 16
+    };
+
+    let isDark = false;
+    let currentRating = 0;
+
+    // Star rating
+    document.querySelectorAll('.star-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentRating = parseInt(btn.dataset.star);
+        document.getElementById('input-rating').value = currentRating;
+        document.getElementById('rating-error').classList.add('hidden');
+        document.querySelectorAll('.star-btn').forEach(s => {
+          s.classList.toggle('active', parseInt(s.dataset.star) <= currentRating);
+          s.style.color = parseInt(s.dataset.star) <= currentRating ? '#facc15' : '#d1d5db';
+        });
+      });
+    });
+
+    // Dark mode
+    document.getElementById('dark-toggle').addEventListener('click', () => {
+      isDark = !isDark;
+      document.body.classList.toggle('dark', isDark);
+      document.body.classList.toggle('light', !isDark);
+      document.getElementById('theme-icon-moon').classList.toggle('hidden', isDark);
+      document.getElementById('theme-icon-sun').classList.toggle('hidden', !isDark);
+    });
+
+    // Form submission via Formspree
+    document.getElementById('feedback-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let valid = true;
+
+      if (!document.getElementById('input-saran').value.trim()) {
+        document.getElementById('saran-error').classList.remove('hidden');
+        valid = false;
+      } else {
+        document.getElementById('saran-error').classList.add('hidden');
+      }
+      if (currentRating === 0) {
+        document.getElementById('rating-error').classList.remove('hidden');
+        valid = false;
+      }
+      if (!valid) return;
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      document.getElementById('submit-text').classList.add('hidden');
+      document.getElementById('submit-loading').classList.remove('hidden');
+
+      try {
+        const formData = new FormData(e.target);
+        await fetch('https://formspree.io/f/xqewpkjn', { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+        document.getElementById('success-toast').classList.remove('hidden');
+        e.target.reset();
+        currentRating = 0;
+        document.querySelectorAll('.star-btn').forEach(s => { s.classList.remove('active'); s.style.color = '#d1d5db'; });
+      } catch (err) {
+        // Show inline error
+        const errEl = document.createElement('p');
+        errEl.className = 'text-red-500 text-sm text-center mt-3';
+        errEl.textContent = 'Gagal mengirim. Silakan coba lagi.';
+        btn.parentNode.appendChild(errEl);
+        setTimeout(() => errEl.remove(), 3000);
+      } finally {
+        btn.disabled = false;
+        document.getElementById('submit-text').classList.remove('hidden');
+        document.getElementById('submit-loading').classList.add('hidden');
+      }
+    });
+
+    document.getElementById('close-toast').addEventListener('click', () => {
+      document.getElementById('success-toast').classList.add('hidden');
+    });
+
+    // Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          const c = { ...defaultConfig, ...config };
+          const font = c.font_family || defaultConfig.font_family;
+          const size = c.font_size || defaultConfig.font_size;
+
+          document.getElementById('el-title').textContent = c.page_title;
+          document.getElementById('el-subtitle').textContent = c.page_subtitle;
+          document.getElementById('submit-text').textContent = c.submit_button_text;
+          document.getElementById('el-success-title').textContent = c.success_message;
+
+          document.getElementById('el-title').style.fontFamily = `${font}, sans-serif`;
+          document.getElementById('el-title').style.fontSize = `${size * 1.875}px`;
+          document.getElementById('el-subtitle').style.fontSize = `${size}px`;
+          document.body.style.fontFamily = `${font}, sans-serif`;
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+            { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+            { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+            { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
+            { get: () => config.muted_color || defaultConfig.muted_color, set: (v) => { config.muted_color = v; window.elementSdk.setConfig({ muted_color: v }); } }
+          ],
+          borderables: [],
+          fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+          fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['page_title', config.page_title || defaultConfig.page_title],
+          ['page_subtitle', config.page_subtitle || defaultConfig.page_subtitle],
+          ['submit_button_text', config.submit_button_text || defaultConfig.submit_button_text],
+          ['success_message', config.success_message || defaultConfig.success_message]
+        ])
+      });
+    }
+
+    lucide.createIcons();
+  </script>
+  <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9ed2fa2b55695f58',t:'MTc3NjM0MDI3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>
